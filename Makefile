@@ -11,4 +11,4 @@ parser.o: src/parser.cpp
 	g++ -c src/parser.cpp
 
 clear:
-	rm *.o final
+	rm *.o final.out
