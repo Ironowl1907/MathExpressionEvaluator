@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+
 #include "../headers/lexer.hpp"
 
 #define log(x) std::cout << x << '\n'

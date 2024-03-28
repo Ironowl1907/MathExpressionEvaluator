@@ -10,6 +10,7 @@
 
 int main (int argc, char *argv[]) {
   Lexer lexer;
+  Parser parser;
   
   while (1){
     std::cout << "calc >> ";
@@ -19,6 +20,10 @@ int main (int argc, char *argv[]) {
     for (auto a : TokenList){
       std::cout << "Type: "<< a.type << " Value: " << a.value << '\n';
     }
+
+    std::cout << "------------------------" << '\n';
+
+    std::cout << parser.Parse(TokenList) << '\n';
   }
   return 0;
 }
