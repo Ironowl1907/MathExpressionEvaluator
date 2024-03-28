@@ -2,6 +2,8 @@
 #include <vector> 
 #include "../headers/parser.hpp"
 
+#define log(x) std::cout << x << '\n'
+
 Token Parser::at() {
     return Input[index];
 }
@@ -13,8 +15,10 @@ int Parser::Parse(std::vector<Token> raw) {
 }
 
 int Parser::ParseExpr() {
+  log('E');
     int Fac1 = ParseTerm();
     index++;
+  log(at().type);
     while (at().type == Sum || at().type == Rest) {
         index++;
         int Fac2 = ParseTerm();
@@ -24,6 +28,7 @@ int Parser::ParseExpr() {
 } 
 
 int Parser::ParseTerm() {
+  log('T');
     int Fac1 = ParseFactor();
     index++;
     while (at().type == Mul || at().type == Div) {
@@ -35,6 +40,7 @@ int Parser::ParseTerm() {
 } 
 
 int Parser::ParseFactor() {
+    log("F");
     Token tempo = at();
     index++;
     return tempo.value;

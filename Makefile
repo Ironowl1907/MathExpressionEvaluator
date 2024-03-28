@@ -1,5 +1,5 @@
 final: main.o lexer.o parser.o
-	g++ -o final main.o lexer.o parser.o
+	g++ -o final.out main.o lexer.o parser.o
 
 main.o: src/main.cpp
 	g++ -c src/main.cpp
