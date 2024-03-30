@@ -9,17 +9,18 @@ enum TokenType {
   Rest,
   Div,
   Mul,
-  OpenPar, ClosePar,
+  OpenPar,
+  ClosePar,
   Error
 };
 
 
 struct Token {
   TokenType type;
-  int value = 0;
+  std::string value = "Default";
 };
 
-Token token (TokenType type = Sum, int value = 0);
+Token token (TokenType type = Sum, std::string value = "Default");
 
 
 class Lexer{

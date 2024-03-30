@@ -7,13 +7,13 @@
 
 #define log(x) std::cout << x << '\n'
 
-Token token (TokenType type, int value) { return {type, value}; };
+Token token (TokenType type, std::string value) { return {type, value}; };
 
 char Lexer::at() { return Lexer::RawInput[index]; };
 
 
 std::vector<Token> Lexer::Tokenize(std::string Input){
-
+  log(Input);
 
   RawInput = Input;
   Tokens = {};
@@ -25,22 +25,29 @@ std::vector<Token> Lexer::Tokenize(std::string Input){
       case ' ':
         break;
       case '+':
-        Lexer::Tokens.push_back(token(Sum));
+        Lexer::Tokens.push_back(token(Sum, "+"));
+        log('+');
         break;
       case '-':
-        Lexer::Tokens.push_back(token(Rest));
+        Lexer::Tokens.push_back(token(Rest, "-"));
+        log('-');
         break;
       case '*':
-        Lexer::Tokens.push_back(token(Mul));
+        Lexer::Tokens.push_back(token(Mul, "*"));
+        log('*');
         break;
       case '/':
-        Lexer::Tokens.push_back(token(Div));
+        Lexer::Tokens.push_back(token(Div, "/"));
+        log('/');
         break;
       case '(':
-        Lexer::Tokens.push_back(token(OpenPar));
+        Lexer::Tokens.push_back(token(OpenPar, "("));
+        log('(');
         break;
       case ')':
-        Lexer::Tokens.push_back(token(ClosePar));
+        Lexer::Tokens.push_back(token(ClosePar, ")"));
+        log(')');
+        break;
 
       default:
       // Checks For numeric value
@@ -48,7 +55,7 @@ std::vector<Token> Lexer::Tokenize(std::string Input){
           std::string Num;
         while (isdigit(Lexer::at())) {
           Num += Lexer::at();
-          Lexer::Tokens.push_back(token(Integer,stoi(Num)));
+          Lexer::Tokens.push_back(token(Integer,Num));
           Lexer::index ++;
         }
       }

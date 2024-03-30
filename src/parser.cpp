@@ -1,4 +1,4 @@
-
+#include <cmath>
 #include <vector> 
 #include "../headers/parser.hpp"
 
@@ -14,34 +14,46 @@ int Parser::Parse(std::vector<Token> raw) {
     return ParseExpr();
 }
 
-int Parser::ParseExpr() {
-  log('E');
-    int Fac1 = ParseTerm();
-    index++;
-  log(at().type);
-    while (at().type == Sum || at().type == Rest) {
-        index++;
-        int Fac2 = ParseTerm();
-        Fac1 = (at().type == Sum) ? Fac1 + Fac2 : Fac1 - Fac2;
-    }
-    return Fac1;
-} 
+int Parser::ParseExpr(){
+  int Term1 = ParseTerm();
+  while (at().type == Sum || at().type == Rest) {
+    TokenType factor = at().type;
+    index ++;
+    int Term2 = ParseTerm();
+    Term1 = (factor == Sum )? Term1 + Term2 : Term1 - Term2;
+  }
+  return Term1;
 
-int Parser::ParseTerm() {
-  log('T');
-    int Fac1 = ParseFactor();
-    index++;
-    while (at().type == Mul || at().type == Div) {
-        index++;
-        int Fac2 = ParseFactor();
-        Fac1 = (at().type == Mul) ? Fac1 * Fac2 : Fac1 / Fac2;
-    }
-    return Fac1;
-} 
+}
 
-int Parser::ParseFactor() {
-    log("F");
+
+int Parser::ParseTerm(){
+  int Fac1 =  ParseFactor();
+  while (at().type == Mul || at().type == Div) {
+    TokenType factor = at().type;
+    index ++;
+    int Fac2  =ParseFactor();
+    Fac1 = (factor == Mul )? Fac1 * Fac2 : Fac1 / Fac2;
+  }
+  return Fac1;
+}
+
+
+int Parser::ParseFactor(){
+  if (at().type == Integer) {
     Token tempo = at();
     index++;
-    return tempo.value;
+    return stoi(tempo.value);
+  }
+  else if (at().type == OpenPar){
+    index++; // Consume (
+    int expr = ParseExpr();
+    if (at().type == ClosePar) index ++; // Consume )
+    else std::cout << "[ERROR] Expected closing Parentesis" << '\n';
+    return expr;
+  }
+  else {
+    std::cout << "[ERROR] Expected integer, recived: " << at().value << '\n';
+    return 0;
+  }
 }

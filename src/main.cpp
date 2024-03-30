@@ -20,6 +20,7 @@ int main (int argc, char *argv[]) {
     for (auto a : TokenList){
       std::cout << "Type: "<< a.type << " Value: " << a.value << '\n';
     }
+    std::cout << "N Tokens: " << TokenList.size() << '\n';
 
     std::cout << "------------------------" << '\n';
 
