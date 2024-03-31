@@ -15,7 +15,6 @@ private:
   int ParseExpr();
   int ParseFactor();
   int ParseTerm();
-  int ParsePrefix();
 
 public:
   int Parse(std::vector<Token> raw);
