@@ -1,7 +1,7 @@
 #include <cmath>
 #include <vector> 
 #include "../headers/parser.hpp"
-
+#include "../headers/Nodes.hpp"
 
 Token Parser::at() {
     return Input[index];
