@@ -5,7 +5,6 @@
 #include "../headers/lexer.hpp"
 #include "../headers/parser.hpp"
 
-#define log(x) std::cout << x << '\n'
 
 
 int main (int argc, char *argv[]) {

@@ -49,9 +49,9 @@ std::vector<Token> Lexer::Tokenize(std::string Input){
           std::string Num;
         while (isdigit(at())) {
           Num += at();
-          Tokens.push_back(token(Integer,Num));
           index ++;
         }
+          Tokens.push_back(token(Integer,Num));
           index --;
       }
       else { 

@@ -2,10 +2,13 @@
 #include <vector> 
 #include "../headers/parser.hpp"
 
-#define log(x) std::cout << x << '\n'
 
 Token Parser::at() {
     return Input[index];
+}
+
+Token Parser::peak(){
+  return Input[index+1];
 }
 
 int Parser::Parse(std::vector<Token> raw) {
@@ -39,21 +42,42 @@ int Parser::ParseTerm(){
 }
 
 
-int  Parser::ParseFactor(){
-  if (at().type == Integer) {
-    Token tempo = at();
-    index++;
-    return stoi(tempo.value);
-  }
-  else if (at().type == OpenPar){
+int  Parser::ParseFactor(){ 
+  if (at().type == OpenPar){
     index++; // Consume (
     int expr = ParseExpr();
     if (at().type == ClosePar) index ++; // Consume )
-    else std::cout << "[ERROR] Expected closing Parentesis" << '\n';
+    else std::cout << "[ERROR] Expected closing Parentesis at: " << index << '\n';
     return expr;
   }
+  if (at().type == Rest && peak().type == OpenPar){
+    index+=2; // Consume - and (
+    int expr = ParseExpr();
+    if (at().type == ClosePar) index ++; // Consume )
+    else std::cout << "[ERROR] Expected closing Parentesis at: " << index << '\n';
+    return expr * (-1);
+
+  }
   else {
-    std::cout << "[ERROR] Expected integer, recived: " << at().value << '\n';
+    return ParsePrefix();
+  }
+}
+
+int Parser::ParsePrefix(){
+
+  if (at().type == Rest){
+    index ++;
+    Token temp = at();
+    index ++;
+    return stoi (temp.value) * (-1);
+  }
+  else if (at ().type == Integer){
+    Token temp = at();
+    index ++;
+    return stoi(temp.value);
+  }
+  else {
+    std::cout << "[ERROR] Expected Factor, recived: " << at().value << '\n';
     return 0;
   }
 }
