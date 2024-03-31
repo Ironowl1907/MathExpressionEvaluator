@@ -39,7 +39,7 @@ int Parser::ParseTerm(){
 }
 
 
-int Parser::ParseFactor(){
+int  Parser::ParseFactor(){
   if (at().type == Integer) {
     Token tempo = at();
     index++;
