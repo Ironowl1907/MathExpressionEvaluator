@@ -5,11 +5,14 @@
 #include "../headers/lexer.hpp"
 #include "../headers/parser.hpp"
 
-
+double solve(const Node* tree){
+  return tree->evaluate();
+}
 
 int main (int argc, char *argv[]) {
   Lexer lexer;
   Parser parser;
+  Node* Tree;
   
   while (1){
     std::cout << "calc >> ";
@@ -23,8 +26,12 @@ int main (int argc, char *argv[]) {
 
     std::cout << "------------------------" << '\n';
 
-    std::cout << parser.Parse(TokenList) << '\n';
+    Tree = parser.Parse(TokenList);
+    if (Tree == nullptr) continue;
+    std::cout << solve(Tree) << '\n';
     break;
   }
+
+  delete Tree;    // Free the Tree memory
   return 0;
 }

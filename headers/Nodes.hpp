@@ -16,6 +16,7 @@ public:
     BinaryOperationNode(Node* l, Node* r) : left(l), right(r) {}
 
     virtual ~BinaryOperationNode() {        // Destructor
+        std::cout << "Destructor" << '\n';
         delete left;
         delete right;
     }
