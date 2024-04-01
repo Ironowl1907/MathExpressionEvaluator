@@ -5,11 +5,11 @@
 #define log(x) std::cout << x << '\n'
 
 Token Parser::at() {
-    return (index >= Input.size())? token(Error) : Input[index];
+  return (index >= Input.size())? token(Error) : Input[index];
 }
 
 Token Parser::peak(){
-  return Input[index+1];
+  return (index + 1 >= Input.size())? token(Error) : Input[ index + 1 ];
 }
 
 Node* Parser::Parse(std::vector<Token> raw) {
@@ -68,6 +68,23 @@ Node* Parser::ParseFactor(){
         index ++;
         return expr;
     }
+    if (at().type == Rest && peak().type == Integer){
+      index ++; 
+      Token temp = at();
+      index ++;
+      return  new NumberNode(stoi(temp.value) * (-1));
+    }
+
+    if (at().type == Rest && peak().type == OpenPar){
+          index += 2; 
+          Node* expr = ParseExpr();
+          if (at().type != ClosePar){
+            std::cout << "[Parsing ERROR] Expected closing parentheses at line: " << index << '\n';
+            return nullptr;
+          }
+          return  new NegateNode(expr);
+    }
+
     else{
         std::cout << "[Parsing ERROR] Expected Factor (aka. Number, (Expression)), instead received: " << at().value << '\n';
         return nullptr;

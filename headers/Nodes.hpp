@@ -22,6 +22,18 @@ public:
 };
 
 
+class UnaryOperationNode : public Node {
+protected:
+    Node* value;
+public:
+    UnaryOperationNode(Node* v) : value(v) {}
+
+    virtual ~UnaryOperationNode() {        // Destructor
+        delete value;
+    }
+};
+
+
 
 // Number node class
 class NumberNode : public Node {
@@ -61,4 +73,10 @@ class DivideNode : public BinaryOperationNode {
 public:
     DivideNode(Node* l, Node* r) : BinaryOperationNode(l, r) {}
     double evaluate() const override { return left->evaluate() / right->evaluate(); }
+};
+
+class NegateNode : public UnaryOperationNode {
+public:
+  NegateNode(Node* v): UnaryOperationNode(v) {}
+  double evaluate() const override { return value->evaluate() * (-1); }
 };
