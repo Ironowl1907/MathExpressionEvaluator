@@ -58,6 +58,16 @@ Node* Parser::ParseFactor(){
         index ++;
         return new NumberNode(stoi(temp.value));
     }
+    if (at().type == OpenPar){
+        index ++;   // Eating par Token 
+        Node* expr = ParseExpr();
+        if (at().type != ClosePar){
+          std::cout << "[Parsing ERROR] Expected closing parentheses at line: " << index << '\n';
+          return nullptr;
+        }
+        index ++;
+        return expr;
+    }
     else{
         std::cout << "[Parsing ERROR] Expected Factor (aka. Number, (Expression)), instead received: " << at().value << '\n';
         return nullptr;
