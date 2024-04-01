@@ -55,7 +55,7 @@ std::vector<Token> Lexer::Tokenize(std::string Input){
           index --;
       }
       else { 
-        std::cout << "Expected valid character, recived " << at() << " In position " << index << '\n';
+        std::cout << "Expected valid character, recived '" << at() << "' In position " << index << '\n';
         return {token(Error)};
       }
       

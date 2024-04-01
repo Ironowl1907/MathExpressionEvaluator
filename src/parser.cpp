@@ -86,7 +86,7 @@ Node* Parser::ParseFactor(){
     }
 
     else{
-        std::cout << "[Parsing ERROR] Expected Factor (aka. Number, (Expression)), instead received: " << at().value << '\n';
+        std::cout << "[Parsing ERROR] Expected Factor (aka. Number or (Expression)), instead received: '" << at().value << "'"<< '\n';
         return nullptr;
     }
 }

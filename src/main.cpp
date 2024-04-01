@@ -14,14 +14,16 @@ int main (int argc, char *argv[]) {
   Parser parser;
   Node* Tree;
   
+  std::cout << "'Q' to quit" << '\n';
   while (1){
     std::cout << "calc >> ";
     std::string input; std::getline(std::cin,input);
-    std::vector<Token> TokenList = lexer.Tokenize(input);
 
-    for (auto a : TokenList){
-      std::cout << "Type: "<< a.type << " Value: " << a.value << '\n';
-    }
+    if (input == "q" || input == "Q" || input == "Quit" || input == "quit") return  0;
+
+    std::vector<Token> TokenList = lexer.Tokenize(input);
+    if (TokenList[0].type == Error) continue;
+ 
     std::cout << "N Tokens: " << TokenList.size() << '\n';
 
     std::cout << "------------------------" << '\n';
@@ -29,7 +31,6 @@ int main (int argc, char *argv[]) {
     Tree = parser.Parse(TokenList);
     if (Tree == nullptr) continue;
     std::cout << solve(Tree) << '\n';
-    break;
   }
 
   delete Tree;    // Free the Tree memory
