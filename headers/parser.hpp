@@ -1,6 +1,8 @@
 #pragma once
 
 #include "../headers/lexer.hpp"
+#include "../headers/Nodes.hpp"
+
 
 class Parser
 {
@@ -12,10 +14,10 @@ private:
   Token at();
   Token peak();
 
-  int ParseExpr();
-  int ParseFactor();
-  int ParseTerm();
+  Node* ParseExpr();
+  Node* ParseFactor();
+  Node* ParseTerm();
 
 public:
-  int Parse(std::vector<Token> raw);
+  Node* Parse(std::vector<Token> raw);
 };

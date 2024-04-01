@@ -1,8 +1,6 @@
 #pragma once
 
-
 // Base classes for all node types
-
 class Node {
 public:
     virtual double evaluate() const = 0;   // Needs  to been overwriten

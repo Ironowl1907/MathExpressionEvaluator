@@ -1,32 +1,67 @@
-#include <cmath>
 #include <vector> 
 #include "../headers/parser.hpp"
 #include "../headers/Nodes.hpp"
 
+#define log(x) std::cout << x << '\n'
+
 Token Parser::at() {
-    return Input[index];
+    return (index >= Input.size())? token(Error) : Input[index];
 }
 
 Token Parser::peak(){
   return Input[index+1];
 }
 
-int Parser::Parse(std::vector<Token> raw) {
-  return 0; 
+Node* Parser::Parse(std::vector<Token> raw) {
+  Input = raw;
+  index = 0;
+  Node* par = ParseExpr();
+  if (par == nullptr) {
+    std::cout << "Main Error" << '\n';
+    return nullptr;
+  }
+  return par;
 }
 
-int Parser::ParseExpr(){
-  return 0;
+Node* Parser::ParseExpr(){
+  Node* Term1 = ParseTerm();
+  while (at().type == Sum || at().type == Rest){
+    TokenType Operator = at().type; 
+    index++;     // Eat Operator
+    Node* Term2 = ParseTerm();
+    if(Term2 == nullptr) return nullptr;      // Checks for not null pointers
+    if (Operator == Sum) new AddNode(Term1, Term2);
+    else return new SubtractNode(Term1,Term2);
+  }
+  return Term1;
 }
 
 
-int Parser::ParseTerm(){
-  return 0;
+Node* Parser::ParseTerm(){
+  Node* Fac1 = ParseFactor();
+  while (at().type == Div || at().type == Mul){
+    TokenType Operator = at().type; 
+    index++;     // Eat Operator
+    Node* Fac2 = ParseTerm();
+    if(Fac2 == nullptr) return nullptr;  // Checks for not null pointers
+
+    if (Operator == Mul) new MultiplyNode(Fac1, Fac2);
+    else return new DivideNode(Fac1,Fac2);
+  }
+  return Fac1;
 }
 
 
-int  Parser::ParseFactor(){ 
-  return 0; 
+Node* Parser::ParseFactor(){
+  if (at().type == Integer){
+    Token temp = at();
+    index ++;
+    return new NumberNode(stoi(temp.value));
+  }
+  else{
+    std::cout << "[Parsing ERROR] Expected Factor (aka. Number, (Expression)), instead recived: " << at().value << '\n';
+    return nullptr;
+  }
 }
 
 

@@ -24,6 +24,7 @@ int main (int argc, char *argv[]) {
     std::cout << "------------------------" << '\n';
 
     std::cout << parser.Parse(TokenList) << '\n';
+    break;
   }
   return 0;
 }
