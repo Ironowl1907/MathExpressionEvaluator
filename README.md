@@ -18,4 +18,4 @@ cd MathExpressionEvaluator && make
 Run the outputted binary:
 ```
 ./final.out
-'''
+```
