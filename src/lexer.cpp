@@ -7,12 +7,11 @@
 
 #define log(x) std::cout << x << '\n'
 
-Token token (TokenType type, std::string value) { return {type, value}; };
+Token token(TokenType type, std::string value) { return {type, value}; };
 
 char Lexer::at() { return RawInput[index]; };
 
-
-std::vector<Token> Lexer::Tokenize(std::string Input){
+std::vector<Token> Lexer::Tokenize(std::string Input) {
   log(Input);
 
   RawInput = Input;
@@ -20,48 +19,46 @@ std::vector<Token> Lexer::Tokenize(std::string Input){
   index = 0;
   while (index < RawInput.size()) {
     switch (at()) {
-      case '\n':
-      case '\t':
-      case ' ':
-        break;
-      case '+':
-        Tokens.push_back(token(Sum, "+"));
-        break;
-      case '-':
-        Tokens.push_back(token(Rest, "-"));
-        break;
-      case '*':
-        Tokens.push_back(token(Mul, "*"));
-        break;
-      case '/':
-        Tokens.push_back(token(Div, "/"));
-        break;
-      case '(':
-        Tokens.push_back(token(OpenPar, "("));
-        break;
-      case ')':
-        Tokens.push_back(token(ClosePar, ")"));
-        break;
+    case '\n':
+    case '\t':
+    case ' ':
+      break;
+    case '+':
+      Tokens.push_back(token(Sum, "+"));
+      break;
+    case '-':
+      Tokens.push_back(token(Rest, "-"));
+      break;
+    case '*':
+      Tokens.push_back(token(Mul, "*"));
+      break;
+    case '/':
+      Tokens.push_back(token(Div, "/"));
+      break;
+    case '(':
+      Tokens.push_back(token(OpenPar, "("));
+      break;
+    case ')':
+      Tokens.push_back(token(ClosePar, ")"));
+      break;
 
-      default:
+    default:
       // Checks For numeric value
-      if (isdigit(at())){
-          std::string Num;
+      if (isdigit(at())) {
+        std::string Num;
         while (isdigit(at())) {
           Num += at();
-          index ++;
+          index++;
         }
-          Tokens.push_back(token(Integer,Num));
-          index --;
-      }
-      else { 
-        std::cout << "Expected valid character, recived '" << at() << "' In position " << index << '\n';
+        Tokens.push_back(token(Integer, Num));
+        index--;
+      } else {
+        std::cout << "Expected valid character, recived '" << at()
+                  << "' In position " << index << '\n';
         return {token(Error)};
       }
-      
     }
-    index ++;
+    index++;
   }
   return Lexer::Tokens;
 }
-
