@@ -41,6 +41,9 @@ std::vector<Token> Lexer::Tokenize(std::string Input) {
     case ')':
       Tokens.push_back(token(ClosePar, ")"));
       break;
+    case '=':
+      Tokens.push_back(token(Assign, "="));
+      break;
 
     default:
       // Checks For numeric value
@@ -52,6 +55,8 @@ std::vector<Token> Lexer::Tokenize(std::string Input) {
         }
         Tokens.push_back(token(Integer, Num));
         index--;
+      } else if (isalpha(at())) {
+        Tokens.push_back(token(Variable, std::string(1, at())));
       } else {
         std::cout << "Expected valid character, recived '" << at()
                   << "' In position " << index << '\n';

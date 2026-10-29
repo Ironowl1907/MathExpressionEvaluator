@@ -3,6 +3,12 @@
 #include "../headers/Nodes.hpp"
 #include "../headers/lexer.hpp"
 
+struct Statement {
+  bool isAssignment = false;
+  char variable = '\0';
+  Node *node = nullptr;
+};
+
 class Parser {
 private:
   unsigned int index = 0;
@@ -17,5 +23,5 @@ private:
   Node *ParseTerm();
 
 public:
-  Node *Parse(std::vector<Token> raw);
+  Statement Parse(std::vector<Token> raw);
 };

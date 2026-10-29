@@ -12,14 +12,40 @@ Token Parser::peek() {
   return (index + 1 >= Input.size()) ? token(Error) : Input[index + 1];
 }
 
-Node *Parser::Parse(std::vector<Token> raw) {
+Statement Parser::Parse(std::vector<Token> raw) {
   Input = raw;
   index = 0;
+  if (Input.empty()) {
+    return {false, '\0', nullptr};
+  }
+
+  if (Input.size() >= 2 && Input[0].type == Variable && Input[1].type == Assign) {
+    char varName = Input[0].value[0];
+    index = 2;
+    Node *expr = ParseExpr();
+    if (expr == nullptr) {
+      return {true, varName, nullptr};
+    }
+    if (index < Input.size()) {
+      std::cout << "[Parsing ERROR] Unexpected token '" << at().value
+                << "' at line: " << index << '\n';
+      delete expr;
+      return {true, varName, nullptr};
+    }
+    return {true, varName, expr};
+  }
+
   Node *par = ParseExpr();
   if (par == nullptr) {
-    return nullptr;
+    return {false, '\0', nullptr};
   }
-  return par;
+  if (index < Input.size()) {
+    std::cout << "[Parsing ERROR] Unexpected token '" << at().value
+              << "' at line: " << index << '\n';
+    delete par;
+    return {false, '\0', nullptr};
+  }
+  return {false, '\0', par};
 }
 
 Node *Parser::ParseExpr() {
@@ -60,6 +86,11 @@ Node *Parser::ParseFactor() {
     index++;
     return new NumberNode(stoi(temp.value));
   }
+  if (at().type == Variable) {
+    Token temp = at();
+    index++;
+    return new VariableNode(temp.value[0]);
+  }
   if (at().type == OpenPar) {
     index++; // Eating par Token
     Node *expr = ParseExpr();
@@ -76,6 +107,12 @@ Node *Parser::ParseFactor() {
     Token temp = at();
     index++;
     return new NumberNode(stoi(temp.value) * (-1));
+  }
+  if (at().type == Rest && peek().type == Variable) {
+    index++;
+    Token temp = at();
+    index++;
+    return new NegateNode(new VariableNode(temp.value[0]));
   }
 
   if (at().type == Rest && peek().type == OpenPar) {

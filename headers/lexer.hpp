@@ -3,7 +3,18 @@
 #include <iostream>
 #include <vector>
 
-enum TokenType { Integer, Sum, Rest, Div, Mul, OpenPar, ClosePar, Error };
+enum TokenType {
+  Integer,
+  Sum,
+  Rest,
+  Div,
+  Mul,
+  OpenPar,
+  ClosePar,
+  Variable,
+  Assign,
+  Error
+};
 
 struct Token {
   TokenType type;

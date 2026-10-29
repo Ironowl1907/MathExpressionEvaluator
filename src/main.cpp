@@ -5,36 +5,48 @@
 #include "../headers/lexer.hpp"
 #include "../headers/parser.hpp"
 
-double solve(const Node *tree) { return tree->evaluate(); }
+double solve(const Node *tree, const SymbolTable &symbols) {
+  return tree->evaluate(symbols);
+}
 
 int main(int argc, char *argv[]) {
   Lexer lexer;
   Parser parser;
-  Node *Tree;
+  SymbolTable symbolTable;
 
-  std::cout << "'Q' to quit" << '\n';
+  std::cout << "'quit' to quit" << '\n';
   while (1) {
     std::cout << "calc >> ";
     std::string input;
-    std::getline(std::cin, input);
+    if (!std::getline(std::cin, input))
+      break;
 
-    if (input == "q" || input == "Q" || input == "Quit" || input == "quit")
+    if (input == "Quit" || input == "quit")
       return 0;
 
     std::vector<Token> TokenList = lexer.Tokenize(input);
-    if (TokenList[0].type == Error)
+    if (TokenList.empty() || TokenList[0].type == Error)
       continue;
 
     std::cout << "N Tokens: " << TokenList.size() << '\n';
 
     std::cout << "------------------------" << '\n';
 
-    Tree = parser.Parse(TokenList);
-    if (Tree == nullptr)
+    Statement stmt = parser.Parse(TokenList);
+    if (stmt.node == nullptr)
       continue;
-    std::cout << solve(Tree) << '\n';
+
+    try {
+      double result = solve(stmt.node, symbolTable);
+      if (stmt.isAssignment) {
+        symbolTable[stmt.variable] = result;
+      }
+      std::cout << result << '\n';
+    } catch (const EvaluationError &) {
+    }
+
+    delete stmt.node;
   }
 
-  delete Tree; // Free the Tree memory
   return 0;
 }
